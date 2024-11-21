@@ -12,8 +12,6 @@
 
 #include "philo.h"
 
-#include "philo.h"
-
 static pthread_mutex_t	*init_forks(t_table *table)
 {
 	pthread_mutex_t	*forks;
