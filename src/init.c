@@ -12,6 +12,11 @@
 
 #include "philo.h"
 
+/**
+ * @brief Initializes and allocates memory for forks (mutexes).
+ * @param table Pointer to the table structure containing simulation data.
+ * @return Pointer to the array of mutexes on success, NULL on failure.
+ */
 static pthread_mutex_t	*init_forks(t_table *table)
 {
 	pthread_mutex_t	*forks;
@@ -30,6 +35,12 @@ static pthread_mutex_t	*init_forks(t_table *table)
 	return (forks);
 }
 
+/**
+ * @brief Initializes and allocates memory for philosopher data.
+ * @param table Pointer to the table structure containing simulation data.
+ * @param philos Pointer to the philosopher array to be initialized.
+ * @return 0 on success, 1 on failure.
+ */
 static int	init_philo(t_table *table, t_philo **philos)
 {
 	int	i;
@@ -52,6 +63,11 @@ static int	init_philo(t_table *table, t_philo **philos)
 	return (0);
 }
 
+/**
+ * @brief Initializes all mutexes needed for the simulation.
+ * @param table Pointer to the table structure containing simulation data.
+ * @return 0 on success, 1 on failure.
+ */
 static int	init_all_mutexes(t_table *table)
 {
 	table->forks = init_forks(table);
@@ -64,6 +80,11 @@ static int	init_all_mutexes(t_table *table)
 	return (0);
 }
 
+/**
+ * @brief Initializes the simulation table with input parameters.
+ * @param table Pointer to the table structure to be initialized.
+ * @return 0 on success, 1 on failure.
+ */
 int	init_table(t_table *table, int ac, char **av)
 {
 	memset(table, 0, sizeof(t_table));
