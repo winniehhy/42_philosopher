@@ -12,6 +12,11 @@
 
 #include "philo.h"
 
+/**
+ * @brief Initializes and starts the philosopher simulation.
+ * @param table Pointer to the simulation table structure.
+ * @return 0 on success, 1 on thread creation failure.
+ */
 int	start_sim(t_table *table)
 {
 	int	i;
@@ -33,6 +38,10 @@ int	start_sim(t_table *table)
 	return (0);
 }
 
+/**
+ * @brief Ends the simulation and cleans up resources.
+ * @param table Pointer to the simulation table structure.
+ */
 void	end_sim(t_table *table)
 {
 	int	i;
