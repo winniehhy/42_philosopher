@@ -15,10 +15,10 @@ SRC_DIR = src
 
 SRC_FILES =	main	\
 			init	\
-			# parse	\
-			# philosophers	\
-			# monitor	\
-			# utils
+			parse	\
+			philosophers	\
+			monitor	\
+			utils
 
 SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
 
