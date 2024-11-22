@@ -21,6 +21,12 @@ static void	sim_start_wait(time_t start_time)
 		continue ;
 }
 
+/*
+* let say 2ms to eat,  3ms to sleep
+* after 2ms eat,(100ms  to 102ms)
+* then sleep ; to wakeuptime = 102ms + 3ms = 105ms
+* then think, prepare for next eat
+*/
 static void	philo_sleep(t_table *table, time_t sleep_time)
 {
 	time_t	wake_up;
@@ -49,6 +55,16 @@ static void	*single_philo_routine(t_philo *philo)
 /*
 * fork[0]= left fork, fork[1]= right fork
 * pthread_mutex_lock(&philo->meal_time_lock); = update last meal time
+*
+* When even eating :
+* - lock left right fork
+* - odd sleep for time_to_eat
+*
+* After eating :
+* - update last meal time, eat count +1
+* - unlock forks
+* - sleep for time_to_sleep
+* - think
 */
 static void	eat_sleep_think(t_philo *philo)
 {
@@ -74,6 +90,7 @@ static void	eat_sleep_think(t_philo *philo)
 * lock when philo easting, unlock after eating
 * philo die if last meal > time to die
 * (philo->id % 2) = id is odd, sleep 5ms
+* while stimulation is not stopped-> continue eat, sleep, think
 */
 void	*philosopher(void *data)
 {

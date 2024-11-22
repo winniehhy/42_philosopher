@@ -62,7 +62,9 @@ static bool	end_condition(t_table *table)
 		return (set_end_status(table, true), true);
 	return (false);
 }
-
+/*
+* update simulation_end to true, then unlock
+*/
 bool	sim_stopped(t_table *table)
 {
 	bool	end;
