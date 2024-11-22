@@ -77,3 +77,11 @@ int	main(int ac, char *av[])
 	end_sim(&table);
 	return (0);
 }
+/* Test Case
+** Test Case 1
+** Input: ./philo 5 800 200 200	
+** Expected:
+
+
+** Test Case 2
+*/

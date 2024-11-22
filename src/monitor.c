@@ -12,6 +12,9 @@
 
 #include "philo.h"
 
+/*
+* lock mutex, update status  (true = end, false = ongoing), unlock mutex
+*/
 static void	set_end_status(t_table *table, bool status)
 {
 	pthread_mutex_lock(&table->sim_end_lock);
@@ -20,8 +23,7 @@ static void	set_end_status(t_table *table, bool status)
 }
 /*
  * check if the philosopher has died
- * if the time since the last meal is greater than the time to die
- * set the simulation end status to true
+ * if the time since the last meal is > time to die
  * print the status of the philosopher
  * unlock the meal_time_lock
 */
@@ -40,6 +42,14 @@ static bool	kill_philo(t_philo *philo)
 	return (false);
 }
 
+/*
+* - Assume all philosophers have eaten enough at the start.
+*   While Lock philosopher's meal time mutex;
+*  1. Checks if any philosopher has not eaten within the time_to_die
+*  2. Check if the philosopher has not yet reached the required number of meals
+*  
+*   True = end simulation; False = continue simulation
+*/
 static bool	end_condition(t_table *table)
 {
 	int		i;
@@ -77,6 +87,11 @@ bool	sim_stopped(t_table *table)
 	return (end);
 }
 
+/*
+* Must_eat_count = 0, exit immediately
+* check end conditin has been met, true = exit
+* thread sleeps for 100 microseconds before rechecking
+*/
 void	*death_monitor(void *data)
 {
 	t_table	*table;
