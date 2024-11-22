@@ -12,11 +12,11 @@
 
 #include "philo.h"
 
-/**
- * @brief Initializes and starts the philosopher simulation.
- * @param table Pointer to the simulation table structure.
- * @return 0 on success, 1 on thread creation failure.
- */
+/* 
+ start the simulation by initializing threads for each philosopher 
+   and a death monitor thread (if more than one philosopher exists).
+   * 20ms to ensure all threads are initialized before the simulation starts 
+*/
 int	start_sim(t_table *table)
 {
 	int	i;
@@ -38,10 +38,9 @@ int	start_sim(t_table *table)
 	return (0);
 }
 
-/**
- * @brief Ends the simulation and cleans up resources.
- * @param table Pointer to the simulation table structure.
- */
+/*
+	end stimulation by joining all threads and freeing memory
+*/
 void	end_sim(t_table *table)
 {
 	int	i;

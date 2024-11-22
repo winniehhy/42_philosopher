@@ -13,9 +13,10 @@
 #include "philo.h"
 
 /**
- * @brief Initializes and allocates memory for forks (mutexes).
- * @param table Pointer to the table structure containing simulation data.
- * @return Pointer to the array of mutexes on success, NULL on failure.
+ * initialized and allocate memory forks mutexes
+ * 
+ * The number of forks is equal to the number of philosophers.
+ * need to lock fork (mutex) while eating, unlock after eating
  */
 static pthread_mutex_t	*init_forks(t_table *table)
 {
@@ -36,10 +37,29 @@ static pthread_mutex_t	*init_forks(t_table *table)
 }
 
 /**
- * @brief Initializes and allocates memory for philosopher data.
- * @param table Pointer to the table structure containing simulation data.
- * @param philos Pointer to the philosopher array to be initialized.
- * @return 0 on success, 1 on failure.
+ * meal_time_lock =  used to lock the last_meal time of the philosopher.
+ * table->forks[i] is the fork assigned to philosopher i
+ * 
+ * Cases:
+ *   Philosopher 0 gets:
+ * 		Left fork: fork[0]
+ *		Right fork: fork[1]
+ *	
+ * Philosopher 1 gets:
+ * Left fork: fork[1]
+ * Right fork: fork[2]
+ * 
+ * Philosopher 2 gets:
+ * Left fork: fork[2]
+ * Right fork: fork[3]
+ * 
+ * Philosopher 3 gets:
+ * Left fork: fork[3]
+ * Right fork: fork[4]
+ * 
+ * Philosopher 4 gets:
+ * Left fork: fork[4]
+ * Right fork: fork[0]
  */
 static int	init_philo(t_table *table, t_philo **philos)
 {
@@ -64,9 +84,9 @@ static int	init_philo(t_table *table, t_philo **philos)
 }
 
 /**
- * @brief Initializes all mutexes needed for the simulation.
- * @param table Pointer to the table structure containing simulation data.
- * @return 0 on success, 1 on failure.
+ * initialized all mutexes ( include fork & others)
+ * sim_end_lock = manage the simulation's end state
+ * write_lock = manage the writing of the status of the philosophers, ensure no same time
  */
 static int	init_all_mutexes(t_table *table)
 {
@@ -81,9 +101,8 @@ static int	init_all_mutexes(t_table *table)
 }
 
 /**
- * @brief Initializes the simulation table with input parameters.
- * @param table Pointer to the table structure to be initialized.
- * @return 0 on success, 1 on failure.
+ * initialized table struct with input & set up mutexes
+ * -1: indicate has not been set
  */
 int	init_table(t_table *table, int ac, char **av)
 {

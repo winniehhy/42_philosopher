@@ -12,6 +12,9 @@
 
 #include "philo.h"
 
+/*
+* wait until stimulation start time
+*/
 static void	sim_start_wait(time_t start_time)
 {
 	while (get_time_in_ms() < start_time)
@@ -30,7 +33,10 @@ static void	philo_sleep(t_table *table, time_t sleep_time)
 		usleep(100);
 	}
 }
-
+/*
+* 1 philosopher case
+* take left fork, sleep until dead time
+*/
 static void	*single_philo_routine(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
@@ -40,7 +46,10 @@ static void	*single_philo_routine(t_philo *philo)
 	pthread_mutex_unlock(philo->fork[1]);
 	return (NULL);
 }
-
+/*
+* fork[0]= left fork, fork[1]= right fork
+* pthread_mutex_lock(&philo->meal_time_lock); = update last meal time
+*/
 static void	eat_sleep_think(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
@@ -61,6 +70,11 @@ static void	eat_sleep_think(t_philo *philo)
 	print_status(philo, "is thinking", false);
 }
 
+/*
+* lock when philo easting, unlock after eating
+* philo die if last meal > time to die
+* (philo->id % 2) = id is odd, sleep 5ms
+*/
 void	*philosopher(void *data)
 {
 	t_philo	*philo;

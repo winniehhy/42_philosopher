@@ -18,7 +18,13 @@ static void	set_end_status(t_table *table, bool status)
 	table->sim_end = status;
 	pthread_mutex_unlock(&table->sim_end_lock);
 }
-
+/*
+ * check if the philosopher has died
+ * if the time since the last meal is greater than the time to die
+ * set the simulation end status to true
+ * print the status of the philosopher
+ * unlock the meal_time_lock
+*/
 static bool	kill_philo(t_philo *philo)
 {
 	time_t	current_time;
