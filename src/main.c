@@ -77,14 +77,3 @@ int	main(int ac, char *av[])
 	end_sim(&table);
 	return (0);
 }
-/* Test Case
-** T1
-** Input: ./philo 5 800 200 200	
-** Expected: All even philo eat first, then odd philo eat, eat sleep think same time
-** Result : 1 die
-
-** T2
-** Input: ./philo 5 1000 300 300
-** Expected: After philo eat still have time to think
-** Result : 1 die
-*/
