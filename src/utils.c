@@ -34,8 +34,24 @@ void	print_status(t_philo *philo, char *str, bool death_status)
 		pthread_mutex_unlock(&philo->table->write_lock);
 		return ;
 	}
+
+	if (str[0] == 'i' && str[1] == 's' && str[2] == ' ' &&
+		str[3] == 'e' && str[4] == 'a' && str[5] == 't' &&
+		str[6] == 'i' && str[7] == 'n' && str[8] == 'g' && str[9] == '\0')
+		printf("\033[0;32m");
+	else if (str[0] == 'h' && str[1] == 'a' && str[2] == 's' &&
+			 str[3] == ' ' && str[4] == 'd' && str[5] == 'i' &&
+			 str[6] == 'e' && str[7] == 'd' && str[8] == '\0')
+		printf("\033[0;31m");
+	else
+		printf("\033[0m");
+
+	// Print the message
 	printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time,
 		philo->id + 1, str);
+
+	// Reset the terminal color
+	printf("\033[0m");
 	pthread_mutex_unlock(&philo->table->write_lock);
 }
 

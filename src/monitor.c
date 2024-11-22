@@ -35,7 +35,7 @@ static bool	kill_philo(t_philo *philo)
 	if ((current_time - philo->last_meal) >= philo->table->time_to_die)
 	{
 		set_end_status(philo->table, true);
-		print_status(philo, "died", true);
+		print_status(philo, "has died", true);
 		pthread_mutex_unlock(&philo->meal_time_lock);
 		return (true);
 	}
