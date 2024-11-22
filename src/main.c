@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hheng < hheng@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 14:27:57 by hheng             #+#    #+#             */
+/*   Created: 2024/11/11 14:27:57 by hheng             #+#    #+#             */
 /*   Updated: 2024/11/21 14:27:57 by hheng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -58,6 +58,11 @@ void	end_sim(t_table *table)
 	free_table(table);
 }
 
+/**
+ * ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
+ * 
+ * check global : cppcheck --enable=all --inconclusive --check-config .
+ */
 int	main(int ac, char *av[])
 {
 	t_table	table;
