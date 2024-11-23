@@ -86,7 +86,8 @@ static int	init_philo(t_table *table, t_philo **philos)
 /**
  * initialized all mutexes ( include fork & others)
  * sim_end_lock = manage the simulation's end state
- * write_lock = manage the writing of the status of the philosophers, ensure no same time
+ * write_lock = manage the writing of the status of the philosophers,
+ * 				ensure no same time
  */
 static int	init_all_mutexes(t_table *table)
 {

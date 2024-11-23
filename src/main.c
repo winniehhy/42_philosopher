@@ -57,11 +57,10 @@ void	end_sim(t_table *table)
 	free_table(table);
 }
 
-/**
- * ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
- * 
- * check global : cppcheck --enable=all --inconclusive --check-config .
- */
+//  ./philo  nb_philo, die, eat, sleep must_eatr_must
+// check global : cppcheck --enable=all --inconclusive --check-config .
+// remove color code : sed -r "s/\x1B\[[0-9;]*m//g" | grep . > test.txt
+
 int	main(int ac, char *av[])
 {
 	t_table	table;

@@ -39,6 +39,7 @@ static void	philo_sleep(t_table *table, time_t sleep_time)
 		usleep(100);
 	}
 }
+
 /*
 * 1 philosopher case
 * take left fork, sleep until dead time
@@ -46,12 +47,13 @@ static void	philo_sleep(t_table *table, time_t sleep_time)
 static void	*single_philo_routine(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
-	print_status(philo, "has taken a fork", false);
+	print_status(philo, "has taken a fork", false, "\033[0m");
 	philo_sleep(philo->table, philo->table->time_to_die);
-	print_status(philo, "has died", false);
+	print_status(philo, "has died", false, "\033[0;31m");
 	pthread_mutex_unlock(philo->fork[1]);
 	return (NULL);
 }
+
 /*
 * fork[0]= left fork, fork[1]= right fork
 * pthread_mutex_lock(&philo->meal_time_lock); = update last meal time
@@ -66,24 +68,26 @@ static void	*single_philo_routine(t_philo *philo)
 * - sleep for time_to_sleep
 * - think
 */
-static void	eat_sleep_think(t_philo *philo)
+static	void	eat_sleep_think(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
-	print_status(philo, "has taken a fork", false);
+	print_status(philo, "has taken a fork", false, "\033[0m");
 	pthread_mutex_lock(philo->fork[1]);
-	print_status(philo, "has taken a fork", false);
-	print_status(philo, "is eating", false);
+	print_status(philo, "has taken a fork", false, "\033[0m");
+	print_status(philo, "is eating", false, "\033[0;32m");
 	philo_sleep(philo->table, philo->table->time_to_eat);
 	pthread_mutex_lock(&philo->meal_time_lock);
 	philo->last_meal = get_time_in_ms();
 	if (sim_stopped(philo->table) == false)
+	{
 		philo->eat_count++;
+	}
 	pthread_mutex_unlock(&philo->meal_time_lock);
-	print_status(philo, "is sleeping", false);
+	print_status(philo, "is sleeping", false, "\033[0m");
 	pthread_mutex_unlock(philo->fork[1]);
 	pthread_mutex_unlock(philo->fork[0]);
 	philo_sleep(philo->table, philo->table->time_to_sleep);
-	print_status(philo, "is thinking", false);
+	print_status(philo, "is thinking", false, "\033[0m");
 }
 
 /*

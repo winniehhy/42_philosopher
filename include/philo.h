@@ -71,7 +71,7 @@ bool	sim_stopped(t_table *table);
 /*Utils*/
 
 time_t	get_time_in_ms(void);
-void	print_status(t_philo *philo, char *str, bool death_status);
+void	print_status(t_philo *philo, char *str, bool death_status, char *color);
 void	free_table(t_table *table);
 void	destroy_mutexes(t_table *table);
 

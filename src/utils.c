@@ -22,11 +22,11 @@ time_t	get_time_in_ms(void)
 
 /*
 * - Lock the write mutex to ensure only one thread prints at a time
-* - Check if the simulation has already stopped and the message is not about a death.
+* - Check if the simulation has already stopped && not death.
 * - Unlock the mutex and exit
 * - Print the status message
 */
-void	print_status(t_philo *philo, char *str, bool death_status)
+void	print_status(t_philo *philo, char *str, bool death_status, char *color)
 {
 	pthread_mutex_lock(&philo->table->write_lock);
 	if (sim_stopped(philo->table) == true && death_status == false)
@@ -34,23 +34,9 @@ void	print_status(t_philo *philo, char *str, bool death_status)
 		pthread_mutex_unlock(&philo->table->write_lock);
 		return ;
 	}
-
-	if (str[0] == 'i' && str[1] == 's' && str[2] == ' ' &&
-		str[3] == 'e' && str[4] == 'a' && str[5] == 't' &&
-		str[6] == 'i' && str[7] == 'n' && str[8] == 'g' && str[9] == '\0')
-		printf("\033[0;32m");
-	else if (str[0] == 'h' && str[1] == 'a' && str[2] == 's' &&
-			 str[3] == ' ' && str[4] == 'd' && str[5] == 'i' &&
-			 str[6] == 'e' && str[7] == 'd' && str[8] == '\0')
-		printf("\033[0;31m");
-	else
-		printf("\033[0m");
-
-	// Print the message
+	printf("%s", color);
 	printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time,
 		philo->id + 1, str);
-
-	// Reset the terminal color
 	printf("\033[0m");
 	pthread_mutex_unlock(&philo->table->write_lock);
 }
@@ -65,11 +51,12 @@ void	free_table(t_table *table)
 		free(table->philos);
 	table = NULL;
 }
+
 /*
 * while 
-* - Iterate through all philosophers to destroy their respective mutexes
+* - Iterate all philosophers to destroy their respective mutexes
 * - Destroy the mutex associated with each fork
-* - Destroy the mutex protecting each philosopher's last meal time and meal count.
+* - Destroy mutex protecting each philosopher's last meal time & meal count.
 * 
 *  Destroy the mutex used for thread-safe printing of status messages
 *  Destroy the mutex used to manage the simulation's end state
