@@ -76,3 +76,8 @@ int	main(int ac, char *av[])
 	end_sim(&table);
 	return (0);
 }
+/*
+- hard code for single philo // but i saw others also did that
+- shd i take s_code
+- initialization need to be done before start simulation
+*/
