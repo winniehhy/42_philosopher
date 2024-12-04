@@ -54,59 +54,50 @@ static void	*single_philo_routine(t_philo *philo)
 	return (NULL);
 }
 
-/*
-* fork[0]= left fork, fork[1]= right fork
-* pthread_mutex_lock(&philo->meal_time_lock); = update last meal time
-*
-* When even eating :
-* - lock left right fork
-* - odd sleep for time_to_eat
-*
-* After eating :
-* - update last meal time, eat count +1
-* - unlock forks
-* - sleep for time_to_sleep
-* - think
-*/
-static void eat_sleep_think(t_philo *philo)
+static void	pick_forks_even(t_philo *philo)
 {
-    // Alternate fork pickup to prevent deadlock
-    if (philo->id % 2 == 0)
-    {
-        pthread_mutex_lock(philo->fork[0]);
-        print_status(philo, "has taken a fork", false, "\033[0m");
-        pthread_mutex_lock(philo->fork[1]);
-    }
-    else
-    {
-        pthread_mutex_lock(philo->fork[1]);
-        print_status(philo, "has taken a fork", false, "\033[0m");
-        pthread_mutex_lock(philo->fork[0]);
-    }
-    
-    print_status(philo, "has taken a fork", false, "\033[0m");
-    print_status(philo, "is eating", false, "\033[0;32m");
-    
-    // Update last meal time before sleeping
-    pthread_mutex_lock(&philo->meal_time_lock);
-    philo->last_meal = get_time_in_ms();
-    if (sim_stopped(philo->table) == false)
-    {
-        philo->eat_count++;
-    }
-    pthread_mutex_unlock(&philo->meal_time_lock);
-    
-    // Actual eating time
-    philo_sleep(philo->table, philo->table->time_to_eat);
-    
-    // Release forks in reverse order
-    pthread_mutex_unlock(philo->fork[1]);
-    pthread_mutex_unlock(philo->fork[0]);
-    
-    print_status(philo, "is sleeping", false, "\033[0m");
-    philo_sleep(philo->table, philo->table->time_to_sleep);
-    
-    print_status(philo, "is thinking", false, "\033[0m");
+	pthread_mutex_lock(philo->fork[0]);
+	print_status(philo, "has taken a fork", false, "\033[0m");
+	pthread_mutex_lock(philo->fork[1]);
+	print_status(philo, "has taken a fork", false, "\033[0m");
+}
+
+static void	pick_forks_odd(t_philo *philo)
+{
+	pthread_mutex_lock(philo->fork[1]);
+	print_status(philo, "has taken a fork", false, "\033[0m");
+	pthread_mutex_lock(philo->fork[0]);
+	print_status(philo, "has taken a fork", false, "\033[0m");
+}
+
+static void	update_meal_stats(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal_time_lock);
+	philo->last_meal = get_time_in_ms();
+	if (sim_stopped(philo->table) == false)
+		philo->eat_count++;
+	pthread_mutex_unlock(&philo->meal_time_lock);
+}
+
+static void	release_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(philo->fork[1]);
+	pthread_mutex_unlock(philo->fork[0]);
+}
+
+static void	eat_sleep_think(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+		pick_forks_even(philo);
+	else
+		pick_forks_odd(philo);
+	print_status(philo, "is eating", false, "\033[0;32m");
+	update_meal_stats(philo);
+	philo_sleep(philo->table, philo->table->time_to_eat);
+	release_forks(philo);
+	print_status(philo, "is sleeping", false, "\033[0m");
+	philo_sleep(philo->table, philo->table->time_to_sleep);
+	print_status(philo, "is thinking", false, "\033[0m");
 }
 
 /*
