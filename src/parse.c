@@ -6,7 +6,7 @@
 /*   By: hheng < hheng@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 14:39:18 by hheng             #+#    #+#             */
-/*   Updated: 2024/11/21 14:39:18 by hheng            ###   ########.fr       */
+/*   Updated: 2024/12/05 14:39:18 by hheng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,13 @@ bool	is_valid_input(int ac, char **av)
 			return (printf("Invalid argument\n"), false);
 	}
 	return (true);
+}
+
+/*
+* wait until stimulation start time
+*/
+void	sim_start_wait(time_t start_time)
+{
+	while (get_time_in_ms() < start_time)
+		continue ;
 }

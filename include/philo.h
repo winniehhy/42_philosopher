@@ -57,6 +57,7 @@ typedef struct s_table
 
 int		philo_atoi(char *str);
 bool	is_valid_input(int ac, char **av);
+void	sim_start_wait(time_t start_time);
 
 /*Init*/
 
@@ -74,6 +75,7 @@ time_t	get_time_in_ms(void);
 void	print_status(t_philo *philo, char *str, bool death_status, char *color);
 void	free_table(t_table *table);
 void	destroy_mutexes(t_table *table);
+void	philo_sleep(t_table *table, time_t sleep_time);
 
 /*Routines*/
 

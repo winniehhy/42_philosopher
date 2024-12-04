@@ -6,7 +6,8 @@
 /*   By: hheng < hheng@student.42kl.edu.my>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 14:40:37 by hheng             #+#    #+#             */
-/*   Updated: 2024/11/21 14:40:37 by hheng            ###   ########.fr       */
+/*   Updated: 2024/12/01
+ 14:40:37 by hheng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +75,23 @@ void	destroy_mutexes(t_table *table)
 	}
 	pthread_mutex_destroy(&table->write_lock);
 	pthread_mutex_destroy(&table->sim_end_lock);
+}
+
+/*
+* let say 2ms to eat,  3ms to sleep
+* after 2ms eat,(100ms  to 102ms)
+* then sleep ; to wakeuptime = 102ms + 3ms = 105ms
+* then think, prepare for next eat
+*/
+void	philo_sleep(t_table *table, time_t sleep_time)
+{
+	time_t	wake_up;
+
+	wake_up = get_time_in_ms() + sleep_time;
+	while (get_time_in_ms() < wake_up)
+	{
+		if (sim_stopped(table) == true)
+			break ;
+		usleep(100);
+	}
 }
