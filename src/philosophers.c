@@ -68,26 +68,45 @@ static void	*single_philo_routine(t_philo *philo)
 * - sleep for time_to_sleep
 * - think
 */
-static	void	eat_sleep_think(t_philo *philo)
+static void eat_sleep_think(t_philo *philo)
 {
-	pthread_mutex_lock(philo->fork[0]);
-	print_status(philo, "has taken a fork", false, "\033[0m");
-	pthread_mutex_lock(philo->fork[1]);
-	print_status(philo, "has taken a fork", false, "\033[0m");
-	print_status(philo, "is eating", false, "\033[0;32m");
-	philo_sleep(philo->table, philo->table->time_to_eat);
-	pthread_mutex_lock(&philo->meal_time_lock);
-	philo->last_meal = get_time_in_ms();
-	if (sim_stopped(philo->table) == false)
-	{
-		philo->eat_count++;
-	}
-	pthread_mutex_unlock(&philo->meal_time_lock);
-	print_status(philo, "is sleeping", false, "\033[0m");
-	pthread_mutex_unlock(philo->fork[1]);
-	pthread_mutex_unlock(philo->fork[0]);
-	philo_sleep(philo->table, philo->table->time_to_sleep);
-	print_status(philo, "is thinking", false, "\033[0m");
+    // Alternate fork pickup to prevent deadlock
+    if (philo->id % 2 == 0)
+    {
+        pthread_mutex_lock(philo->fork[0]);
+        print_status(philo, "has taken a fork", false, "\033[0m");
+        pthread_mutex_lock(philo->fork[1]);
+    }
+    else
+    {
+        pthread_mutex_lock(philo->fork[1]);
+        print_status(philo, "has taken a fork", false, "\033[0m");
+        pthread_mutex_lock(philo->fork[0]);
+    }
+    
+    print_status(philo, "has taken a fork", false, "\033[0m");
+    print_status(philo, "is eating", false, "\033[0;32m");
+    
+    // Update last meal time before sleeping
+    pthread_mutex_lock(&philo->meal_time_lock);
+    philo->last_meal = get_time_in_ms();
+    if (sim_stopped(philo->table) == false)
+    {
+        philo->eat_count++;
+    }
+    pthread_mutex_unlock(&philo->meal_time_lock);
+    
+    // Actual eating time
+    philo_sleep(philo->table, philo->table->time_to_eat);
+    
+    // Release forks in reverse order
+    pthread_mutex_unlock(philo->fork[1]);
+    pthread_mutex_unlock(philo->fork[0]);
+    
+    print_status(philo, "is sleeping", false, "\033[0m");
+    philo_sleep(philo->table, philo->table->time_to_sleep);
+    
+    print_status(philo, "is thinking", false, "\033[0m");
 }
 
 /*
@@ -112,7 +131,7 @@ void	*philosopher(void *data)
 	if (philo->table->nb_philo == 1)
 		return (single_philo_routine(philo));
 	else if (philo->id % 2)
-		usleep(5000);
+        usleep(philo->table->time_to_eat * 1000 / 2);
 	while (sim_stopped(philo->table) == false)
 		eat_sleep_think(philo);
 	return (NULL);

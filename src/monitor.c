@@ -30,17 +30,18 @@ static void	set_end_status(t_table *table, bool status)
 */
 static bool	kill_philo(t_philo *philo)
 {
-	time_t	current_time;
+    time_t	current_time;
+    time_t  buffer = 1; // Small buffer to prevent race conditions
 
-	current_time = get_time_in_ms();
-	if ((current_time - philo->last_meal) >= philo->table->time_to_die)
-	{
-		set_end_status(philo->table, true);
-		print_status(philo, "has died", true, "\033[0;31m");
-		pthread_mutex_unlock(&philo->meal_time_lock);
-		return (true);
-	}
-	return (false);
+    current_time = get_time_in_ms();
+    if ((current_time - philo->last_meal) >= (philo->table->time_to_die - buffer))
+    {
+        set_end_status(philo->table, true);
+        print_status(philo, "has died", true, "\033[0;31m");
+        pthread_mutex_unlock(&philo->meal_time_lock);
+        return (true);
+    }
+    return (false);
 }
 
 /*
