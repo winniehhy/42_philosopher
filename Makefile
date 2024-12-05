@@ -7,7 +7,7 @@ RESET = \033[0m
 ORANGE = \033[0;38;5;166m
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pthread -g3 #-fsanitize=thread #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pthread -g3 -fsanitize=thread #-fsanitize=address
 
 INCLUDE = -Iinclude
 

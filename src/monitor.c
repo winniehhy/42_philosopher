@@ -23,10 +23,10 @@ static void	set_end_status(t_table *table, bool status)
 }
 
 /*
- * check if the philosopher has died
- * if the time since the last meal is > time to die
- * print the status of the philosopher
- * unlock the meal_time_lock
+1. get current time
+2. check if the time since the last meal is greater than time_to_die
+3. if true, set end status to true, print status, unlock mutex
+4. return true
 */
 static bool	kill_philo(t_philo *philo)
 {
