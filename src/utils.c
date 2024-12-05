@@ -86,12 +86,19 @@ void	destroy_mutexes(t_table *table)
 void	philo_sleep(t_table *table, time_t sleep_time)
 {
 	time_t	wake_up;
+	time_t	current_time;
 
 	wake_up = get_time_in_ms() + sleep_time;
-	while (get_time_in_ms() < wake_up)
+	while (1)
 	{
+		current_time = get_time_in_ms();
+		if (current_time >= wake_up)
+			break ;
 		if (sim_stopped(table) == true)
 			break ;
-		usleep(100);
+		if (wake_up - current_time > 10)
+			usleep(100);
+		else
+			usleep(10);
 	}
 }
