@@ -78,10 +78,10 @@ void	destroy_mutexes(t_table *table)
 }
 
 /*
-* let say 2ms to eat,  3ms to sleep
-* after 2ms eat,(100ms  to 102ms)
-* then sleep ; to wakeuptime = 102ms + 3ms = 105ms
-* then think, prepare for next eat
+1. calculate wake up time
+2. loop until the sleep time is over
+3. check if the simulation has stopped
+4. sleep for 100ms if the time left is more than 10ms
 */
 void	philo_sleep(t_table *table, time_t sleep_time)
 {
