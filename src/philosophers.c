@@ -46,7 +46,6 @@ static void	handle_fork_pickup(t_philo *philo)
 - Checks if the simulation has not stopped 
 	If the simulation is still running, 
 	increments the philosopher's eat_count.
-
 - Releases the lock on meal_time_lock to allow 
 	other threads to access last_meal.
 - Calls philo_sleep to simulate the time it 
