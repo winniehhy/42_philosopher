@@ -12,6 +12,17 @@
 
 #include "philo.h"
 
+/*
+1. even Id
+- lock the first fork (left)
+- print status
+- lock second fork (right)
+
+2. odd Id
+- lock the second fork (right)
+- print status
+- lock first fork (left)
+*/
 static void	handle_fork_pickup(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
@@ -29,6 +40,19 @@ static void	handle_fork_pickup(t_philo *philo)
 	print_status(philo, "has taken a fork", false, "\033[0m");
 }
 
+/*
+- print eating
+- Locks the meal_time_lock mutex to update last_meal
+- Checks if the simulation has not stopped 
+	If the simulation is still running, 
+	increments the philosopher's eat_count.
+
+- Releases the lock on meal_time_lock to allow 
+	other threads to access last_meal.
+- Calls philo_sleep to simulate the time it 
+takes for the philosopher to eat (philo->table->time_to_eat).
+- Unlocks the mutexes for the forks.
+*/
 static void	update_and_eat(t_philo *philo)
 {
 	print_status(philo, "is eating", false, "\033[0;32m");
@@ -42,6 +66,9 @@ static void	update_and_eat(t_philo *philo)
 	pthread_mutex_unlock(philo->fork[0]);
 }
 
+/*
+- for single philo routine
+*/
 static void	*single_philo_routine(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
@@ -52,6 +79,13 @@ static void	*single_philo_routine(t_philo *philo)
 	return (NULL);
 }
 
+/*
+1. while the simulation is still running
+2. pick up the forks
+3. update and eat
+4. print sleeping
+5. simulate sleeping
+*/
 static void	do_philo_cycle(t_philo *philo)
 {
 	while (sim_stopped(philo->table) == false)
@@ -64,6 +98,19 @@ static void	do_philo_cycle(t_philo *philo)
 	}
 }
 
+/*
+1. extract philo data, pointer to access individual
+2. if must_eat_count is 0, return NULL
+3. lock the meal_time_lock mutex to update last_meal
+4. unlock the meal_time_lock mutex to allow other threads 
+	to access last_meal
+5. wait for the simulation to start
+6. if time_to_die is 0, return NULL
+7. if only 1 philosopher, call single_philo_routine
+8. if the philosopher's id is odd, sleep for half the time 
+	it takes to eat
+9. call do_philo_cycle to simulate the philosopher's actions
+*/
 void	*philosopher(void *data)
 {
 	t_philo	*philo;
